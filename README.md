@@ -45,7 +45,7 @@ o	Modal needs to be rendered at body level in the DOM to center over everything.
 
 
 
-# HERES OUR WEB PROJECT YAY 
+# HERES OUR WEB PROJECT
 
 Basically we're gonna do these things: 
 
