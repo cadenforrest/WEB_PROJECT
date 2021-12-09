@@ -6,8 +6,20 @@
 {% block content %}
 
 <div id="homeTitleSpan">
-    <h1 class="text-center mt-4" id="taskID">Task {{ task_number }} Details</h1>
+    <!-- <h1 class="text-center mt-4" id="taskID">TSK-{{ task_number }} Details</h1> -->
 </div>
+<!-- <div class="row mt-4">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card shadow-lg homeCardTitle" id="dashboardCard">
+            <div class="card-title">
+                <h1 class="text-center mt-4" id="taskID">TSK-{{ task_number }} Details</h1>
+
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div> -->
 
 <!-- ------------------------------------------------------- Task Details ---------------------------------------------------------- -->
 
@@ -19,16 +31,18 @@
 
         <!-- Task Data-->
 
-        <div class="card" style="width: auto">
+        <div class="card mt-5" style="width: auto">
+            <h2 class="text-center mt-2" id="taskID">TSK-{{ task_number }} Details</h2>
 
-            <div class="card-body">
+            <div class="card-body my-2">
 
                 <div class="container">
-                    <!-- <h1 class="text-center mt-4" id="taskID">Task {{ task_number }} Details</h1> -->
+
                     <form action="/update_task" method="POST">
                         <div class="row">
                             <div class=" col">
                                 <span>Assigned To: </span>
+                                {% if role == "Boss" %}
                                 <select id="userChange" class="form-control" name="user_change">
                                     <option selected>{{ task_assigned_to }}</option>
                                     <option></option>
@@ -36,6 +50,39 @@
                                     <option>{{ user['first_name']}}</option>
                                     {% endfor %}
                                 </select>
+                                {% else %}
+                                <input type="text" class="form-control" id="userAssignedTo"
+                                    value="{{ task_assigned_to }}" readonly>
+                                {% endif %}
+                            </div>
+                            <!-- <div class="col">
+                                <span>Status: </span>
+                                <select id="statusChange" class="form-control" name="status_change">
+                                    <option selected>{{ task_status }}</option>
+                                    <option>Open</option>
+                                    <option>Pending</option>
+                                    <option>Closed</option>
+                                </select>
+                            </div> -->
+                            <div class="col">
+                                <span>Priortiy: </span>
+                                {% if role == "Boss" %}
+                                <select id="priorityChange" class="form-control" name="priority_change">
+                                    <option selected>{{ task_priority }}</option>
+                                    <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                </select>
+                                {% else %}
+                                <input type="text" class="form-control" id="userPriority" value="{{ task_priority }}"
+                                    readonly>
+                                <!-- <select id="priorityChange" class="form-control" name="priority_change" readonly>
+                                    <option selected>{{ task_priority }}</option>
+                                <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                </select> -->
+                                {% endif %}
                             </div>
                             <div class="col">
                                 <span>Status: </span>
@@ -46,60 +93,56 @@
                                     <option>Closed</option>
                                 </select>
                             </div>
-                            <div class="col">
-                                <span>Priortiy: </span>
-                                <select id="priorityChange" class="form-control" name="priority_change">
-                                    <option selected>{{ task_priority }}</option>
-                                    <option>Low</option>
-                                    <option>Medium</option>
-                                    <option>High</option>
-                                </select>
-                            </div>
                         </div>
 
                         <br>
 
                         <div class="row">
-                            <div class="col">
+                            <div class="col"></div>
+                            <div class="col-4">
                                 <span>Start Date: </span>
                                 <input type="text" class="form-control" id="startDateChange" name="start_date_change"
                                     value="{{ task_start_date }}" readonly>
                             </div>
-                            <div class=" col">
+                            <div class=" col-4">
                                 <span>Target Date: </span>
                                 <input type="date" class="form-control" id="targetChange" name="target_change"
                                     value="{{ task_target_date }}">
                             </div>
-                            <div class="col">
-                            </div>
+                            <!-- <div class="col"></div> -->
                         </div>
 
                         <br>
 
                         <div class="row mt-3">
                             <div class="col-4 ">
-                                <div class="input-group">
+                                <!-- <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Task</span>
                                     </div>
                                     <textarea class="form-control" aria-label="With textarea" rows="1"
                                         placeholder="{{ task_label }}" readonly></textarea>
-                                </div>
+                                </div> -->
+                                <span class="">Task</span>
+                                <textarea class="form-control" aria-label="With textarea" rows="2"
+                                    placeholder="{{ task_label }}" readonly></textarea>
                             </div>
                             <div class="col">
-                                <div class="input-group">
+                                <!-- <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Description</span>
                                     </div>
                                     <textarea class="form-control" aria-label="With textarea" rows="1"
                                         placeholder="{{ task_description }}" readonly></textarea>
-                                </div>
+                                </div> -->
+                                <span class="">Description</span>
+                                <textarea class="form-control" aria-label="With textarea" rows="2"
+                                    placeholder="{{ task_description }}" readonly></textarea>
                             </div>
                         </div>
                 </div>
 
-                <button type="submit" id="taskUpdate"
-                    class="btn btn-outline-secondary btn mt-4 float-right">Update</button>
+                <button type="submit" id="taskUpdate" class="btn btn-secondary btn mt-4 float-right">Update</button>
                 <input type="hidden" name="updateTaskNum" value="{{ task_number }}">
                 </form>
 
@@ -112,10 +155,17 @@
                         <div class="media">
                             <i class="far fa-comment-alt mr-2 mt-1"></i>
                             <div class="media-body">
-                                <h5 class="mt-0">{{ comment['assigned_to']}}</h5>
+                                <h5 class="mt-0">{{ comment['first_name'] }}</h5>
                                 <p>{{ comment['comment']}}</p>
+
+                                {% if user_name == comment['assigned_to'] %}
                                 <button href="/remove_comment" type="submit" id="removeComment"
                                     class="btn btn-sm btn-outline-secondary float-right">Remove</button>
+                                {% elif role == "Boss" %}
+                                <button href="/remove_comment" type="submit" id="removeComment"
+                                    class="btn btn-sm btn-outline-secondary float-right">Remove</button>
+                                {%endif%}
+
                             </div>
                         </div>
                     </li>
@@ -127,7 +177,7 @@
 
             <!-- Button trigger modal -->
             <div class="card-body">
-                <a class="btn btn-outline-dark ml-auto d-block" role="button" type="button" id="addComment" href=""
+                <a class="btn btn-secondary ml-auto d-block" role="button" type="button" id="addComment" href=""
                     aria-disabled="true" data-toggle="modal" data-target="#staticBackdrop">Add Comment</a>
             </div>
         </div>

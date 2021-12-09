@@ -53,6 +53,7 @@ def index():
     return render_template('login.html')
 
 
+
 #   Login
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -184,7 +185,7 @@ def home():
 
             if user_role == 'User':
                 # get list of open tasks for user
-                select_open_task_list = """SELECT task_num, task, status, description FROM task WHERE assigned_to = %(first_name)s AND status != 'Closed' """
+                select_open_task_list = """SELECT task_num, task, status, description, target_date FROM task WHERE assigned_to = %(first_name)s AND status != 'Closed' """
                 cur.execute(select_open_task_list, {'first_name': first_name})
                 open_task_list = cur.fetchall()
                 # print(task_list)
@@ -214,7 +215,7 @@ def task():
 
         # snapshot user object
         user = session['user']
-        print(session)
+        # print(session)
         # parse user name from user object
         user_name = user[0]['email']
         # print(user_name)
@@ -236,7 +237,7 @@ def task():
         # Get Task Number from form body
         # task_number = request.form.get('taskNum')
         task_number = request.args['taskNum']
-        print(request.args)
+        # print(request.args)
 
         # get task detail of task from task table
         select_task = """SELECT status, priority, start_date, assigned_to, target_date, description, task FROM task WHERE task_num = %(tempTaskNum)s """
@@ -245,7 +246,7 @@ def task():
         # print(task_detail)
 
         # Get Comments associated to task selected
-        select_comments_query = """SELECT comment, assigned_to FROM comments WHERE task_num = %(task_number)s """
+        select_comments_query = """SELECT comment, assigned_to, first_name FROM comments WHERE task_num = %(task_number)s """
         cur.execute(select_comments_query, {'task_number': task_number})
         comment_list = cur.fetchall()
         # print(comment_list)
@@ -278,7 +279,8 @@ def task():
                                task_label=task_label,
                                task_number=task_number,
                                user_list=user_list,
-                               user_name=user_name)
+                               user_name=user_name,
+                               role=role)
     # return render_template("login.html")
 
 
@@ -313,8 +315,8 @@ def addComment():
             # print(first_name)
 
             # Insert comment with user first name and task number into comments table
-            search_data = (first_name, comment, task_number)
-            cur.execute('''INSERT INTO comments VALUES (%s, %s, %s)''', search_data)
+            search_data = (user_name, comment, task_number, first_name)
+            cur.execute('''INSERT INTO comments VALUES (%s, %s, %s, %s)''', search_data)
             mysql.connection.commit()
             # Close the cursor connection
             cur.close()
@@ -365,8 +367,8 @@ def removeComment():
                 cur.close()
             else:
                 # Remove comment from comments table associated to task number added by this user only
-                remove_comment_query = """DELETE FROM comments  WHERE assigned_to = %(first_name)s AND comment = %(comment)s AND task_num = %(task_num)s """
-                cur.execute(remove_comment_query, {'first_name': first_name, "comment": comment_text, "task_num": task_num})
+                remove_comment_query = """DELETE FROM comments  WHERE assigned_to = %(user_name)s AND comment = %(comment)s AND task_num = %(task_num)s """
+                cur.execute(remove_comment_query, {'user_name': user_name, "comment": comment_text, "task_num": task_num})
                 mysql.connection.commit()
                 cur.close()
 
@@ -507,19 +509,19 @@ def boss():
             # print(priority_count)
 
             # get list of open assigned tasks from task db
-            user_assigned_task_list = """SELECT task_num, task, status, description, assigned_to FROM task WHERE assigned_to != '' AND status != 'Closed'  """
+            user_assigned_task_list = """SELECT task_num, task, status, description, assigned_to, priority FROM task WHERE assigned_to != '' AND status != 'Closed'  """
             cur.execute(user_assigned_task_list, {'first_name': first_name})
             task_list = cur.fetchall()
             # print(task_list)
 
             # get task list of open unassigned tasks from task db
-            user_not_assigned_task_list = """SELECT task_num, task, status, description, assigned_to FROM task WHERE assigned_to = '' AND status != 'Closed'  """
+            user_not_assigned_task_list = """SELECT task_num, task, status, description, priority FROM task WHERE assigned_to = '' AND status != 'Closed'  """
             cur.execute(user_not_assigned_task_list, {'first_name': first_name})
             unassigned_task_list = cur.fetchall()
             # print(unassigned_task_list)
 
             # get task list of closed tasks from task db
-            user_closed_task_list = """SELECT task_num, task, status, description, assigned_to FROM task WHERE status = 'Closed'  """
+            user_closed_task_list = """SELECT task_num, task, description, assigned_to FROM task WHERE status = 'Closed'  """
             cur.execute(user_closed_task_list, {'first_name': first_name})
             closed_task_list = cur.fetchall()
             # print(unassigned_task_list)

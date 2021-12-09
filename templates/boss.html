@@ -34,7 +34,20 @@
 {% block content %}
 
 <div class="container mt-4">
-    <h1 class="text-center" id="dashboardTitle">Boss Dashboard</h1>
+    <!-- <h1 class="text-center" id="dashboardTitle">{{ first_name}}'s Boss Dashboard</h1> -->
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+            <div class="card shadow-lg homeCardTitle" id="dashboardCard">
+                <div class="card-title">
+                    <h1 class="text-center mt-4" id="taskID">{{ first_name}}'s Dashboard</h1>
+
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+    <hr class="my-4">
     <div class="row mt-3">
 
         <div class="col-sm-4">
@@ -44,8 +57,10 @@
                     <ul class="list-group list-group-flush ulList">
 
                         {% for user in user_count %}
-                        <li class=" list-group-item d-flex justify-content-between align-items-center">
-                            {{ user['assigned_to'] }}<span class="badge badge-light shadow">{{ user['count'] }}</span>
+                        <li
+                            class=" list-group-item d-flex justify-content-between align-items-center shadow dashListGroup">
+                            {{ user['assigned_to'] }}<span class="badge badge-light shadow countBadge">{{ user['count']
+                                }}</span>
                         </li>
                         {% endfor %}
                     </ul>
@@ -59,8 +74,9 @@
                     <ul class="list-group list-group-flush ulList">
 
                         {% for count in unassigned_count %}
-                        <li class=" list-group-item d-flex justify-content-between align-items-center">
-                            Not Assigned<span class="badge badge-light shadow">{{ count['count'] }}</span>
+                        <li
+                            class=" list-group-item d-flex justify-content-between align-items-center shadow dashListGroup">
+                            Not Assigned<span class="badge badge-light shadow countBadge">{{ count['count'] }}</span>
                         </li>
                         {% endfor %}
                     </ul>
@@ -74,8 +90,10 @@
                     <ul class="list-group list-group-flush ulList">
 
                         {% for count in priority_count %}
-                        <li class=" list-group-item d-flex justify-content-between align-items-center">
-                            {{ count['priority'] }}<span class="badge badge-light shadow">{{ count['count'] }}</span>
+                        <li
+                            class=" list-group-item d-flex justify-content-between align-items-center shadow dashListGroup">
+                            {{ count['priority'] }}<span class="badge badge-light shadow countBadge">{{ count['count']
+                                }}</span>
                         </li>
                         {% endfor %}
                     </ul>
@@ -93,14 +111,15 @@
         <div class="col-10 mx-auto" id="task_list">
 
 
-            <h3 class="text-center">Assigned Tasks</h3>
+            <h3 class="text-center tableTitle">Assigned Tasks</h3>
             <table class="table table-dark shadow-lg ">
                 <thead class="rounded">
                     <tr class="border-0">
                         <th scope="col">#</th>
                         <th scope="col">Task</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Assigned To</th>
                     </tr>
                 </thead>
@@ -110,13 +129,15 @@
                         <th scope="row">
 
                             <form action="/task" method="GET">
-                                <input type="submit" name="taskNum" value="{{ task['task_num'] }}" id="taskNumLink">
+                                <input type="submit" class="taskButton shadow" name="taskNum"
+                                    value="{{ task['task_num'] }}" id="taskNumLink">
                             </form>
 
                         </th>
                         <td>{{ task['task'] }}</td>
-                        <td>{{ task['status'] }}</td>
                         <td>{{ task['description'] }}</td>
+                        <td>{{ task['priority'] }}</td>
+                        <td>{{ task['status'] }}</td>
                         <td>{{ task['assigned_to'] }}</td>
                     </tr>
                     {% endfor %}
@@ -124,15 +145,17 @@
             </table>
 
             <br>
+            <hr class="my-4">
 
-            <h3 class="text-center">Unassigned Tasks</h3>
+            <h3 class="text-center tableTitle">Unassigned Tasks</h3>
             <table class="table table-dark shadow-lg">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Task</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,13 +164,15 @@
                         <th scope="row">
 
                             <form action="/task" method="GET">
-                                <input type="submit" name="taskNum" value="{{ task['task_num'] }}" id="taskNumLink">
+                                <input type="submit" class="taskButton shadow" name="taskNum"
+                                    value="{{ task['task_num'] }}" id="taskNumLink">
                             </form>
 
                         </th>
                         <td>{{ task['task'] }}</td>
-                        <td>{{ task['status'] }}</td>
                         <td>{{ task['description'] }}</td>
+                        <td>{{ task['priority'] }}</td>
+                        <td>{{ task['status'] }}</td>
                     </tr>
                     {% endfor %}
 
@@ -155,14 +180,15 @@
             </table>
 
             <br>
+            <hr class="my-4">
 
-            <h3 class="text-center">Closed Tasks</h3>
+            <h3 class="text-center tableTitle">Closed Tasks</h3>
             <table class="table table-dark shadow-lg">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Task</th>
-                        <th scope="col">Status</th>
+                        <!-- <th scope="col">Status</th> -->
                         <th scope="col">Description</th>
                         <th scope="col">Worked By</th>
                     </tr>
@@ -173,12 +199,13 @@
                         <th scope="row">
 
                             <form action="/task" method="GET">
-                                <input type="submit" name="taskNum" value="{{ task['task_num'] }}" id="taskNumLink">
+                                <input type="submit" class="taskButton shadow" name="taskNum"
+                                    value="{{ task['task_num'] }}" id="taskNumLink">
                             </form>
 
                         </th>
                         <td>{{ task['task'] }}</td>
-                        <td>{{ task['status'] }}</td>
+                        <!-- <td>{{ task['status'] }}</td> -->
                         <td>{{ task['description'] }}</td>
                         <td>{{ task['assigned_to'] }}</td>
                     </tr>
