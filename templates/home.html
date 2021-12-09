@@ -8,7 +8,19 @@
 
 <div class="container mt-4">
     <div id="homeTitleSpan">
-        <h1 class="text-center" id="dashboardTitle">{{ first_name }}'s Task List</h1>
+        <!-- <h1 class="text-center" id="dashboardTitle">{{ first_name }}'s Task List</h1> -->
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-5">
+            <div class="card shadow-lg homeCardTitle" id="dashboardCard">
+                <div class="card-title">
+                    <h2 class="text-center mt-4" id="taskID">{{ first_name }}'s Task List</h2>
+
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
     </div>
 
     <hr class="my-4">
@@ -21,14 +33,15 @@
 
 
             <!-- Title -->
-            <h3 class="text-center">Open Tasks</h3>
+            <h3 class="text-center tableTitle">Open Tasks</h3>
             <table class="table table-dark shadow-lg">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Task</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Task</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Due Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,27 +50,30 @@
                         <th scope="row">
 
                             <form action="/task" method="GET">
-                                <input type="submit" name="taskNum" value="{{ task['task_num'] }}" id="taskNumLink">
+                                <input type="submit" class="taskButton shadow" name="taskNum"
+                                    value="{{ task['task_num'] }}" id="taskNumLink">
                             </form>
 
                         </th>
-                        <td>{{ task['task'] }}</td>
                         <td>{{ task['status'] }}</td>
+                        <td>{{ task['task'] }}</td>
                         <td>{{ task['description'] }}</td>
+                        <td>{{ task['target_date'] }}</td>
                     </tr>
                     {% endfor %}
 
                 </tbody>
             </table>
             <br>
-            <h3 class="text-center">Closed Tasks</h3>
+            <hr class="my-4">
+            <h3 class="text-center tableTitle">Closed Tasks</h3>
             <table class="table table-dark shadow-lg">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Task</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,14 +81,15 @@
                     <tr>
                         <th scope="row">
 
-                            <form action="/task" method="POST">
-                                <input type="submit" name="taskNum" value="{{ task['task_num'] }}" id="taskNumLink">
+                            <form action="/task" method="GET">
+                                <input type="submit" class="taskButton shadow" name="taskNum"
+                                    value="{{ task['task_num'] }}" id="taskNumLink">
                             </form>
 
                         </th>
                         <td>{{ task['task'] }}</td>
-                        <td>{{ task['status'] }}</td>
                         <td>{{ task['description'] }}</td>
+                        <td>{{ task['status'] }}</td>
                     </tr>
                     {% endfor %}
 

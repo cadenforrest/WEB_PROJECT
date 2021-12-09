@@ -58,9 +58,9 @@
 
 <div class="container">
 
-    <h3 class="text-center mt-4">Create New Task</h4>
+    <!-- <h3 class="text-center mt-4">Create New Task</h4> -->
 
-        <form class="mt-5" action="/new_task" method="POST">
+    <!-- <form class="mt-5" action="/new_task" method="POST">
             <div class="form-row">
                 <div class="form-group col-md-2">
                     <label for="userAssigned" class="newTaskLabel">Assigned</label>
@@ -117,7 +117,75 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-dark float-right">Create</button>
-        </form>
+        </form> -->
+    <br>
+    <br>
+
+
+    <div class="card shadow-lg mt-5" id="dashboardCard">
+        <div class="card-body">
+            <!-- <h5 class="card-title text-center homeCardTitle">Unassigned Tasks</h5> -->
+            <h2 class="text-center mt-4 newTaskTitle">Create New Task</h2>
+            <form class="mt-5" action="/new_task" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="userAssigned" class="newTaskLabel">Assigned</label>
+                        <select id="userAssigned" class="form-control" name="user_assigned">
+                            <option selected>{{ task_assigned_to }}</option>
+                            {% for user in user_list_new_task %}
+                            <option>{{ user['first_name']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputTask" class="newTaskLabel">Task</label>
+                        <input type="text" class="form-control" id="inputTask" name="task_label">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDescription" class="newTaskLabel">Description</label>
+                        <input type="text" class="form-control" id="inputDescription" name="task_desc">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputStartDate" class="newTaskLabel">Start Date</label>
+                        <input type="date" class="form-control" id="inputStartDate" name="task_start">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputTargetDate" class="newTaskLabel">Target Date</label>
+                        <input type="date" class="form-control" id="inputTargetDate" name="task_target">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputStatus" class="newTaskLabel">Status</label>
+                        <select id="inputStatus" class="form-control" name="task_status">
+                            <option selected></option>
+                            <option>Open</option>
+                            <option>Pending</option>
+                            <option>Closed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputPriority" class="newTaskLabel">Priority</label>
+                        <select id="inputPriority" class="form-control" name="task_priority">
+                            <option selected></option>
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group d-inline">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck" name="task_assigned">
+                        <label class="form-check-label assignToMeLabel ml-2" for="gridCheck">
+                            Assign to me
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-dark float-right">Create</button>
+            </form>
+        </div>
+    </div>
 
 </div>
 
